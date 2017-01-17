@@ -83,6 +83,8 @@ Dayron Models can work together with Ecto Models, allowing data loading from Dat
 
 ## Retrieving Data
 
+### Using the Repo
+
 After defining the configuration and model, you are allowed to retrieve data from an external API in a similar way when compared to an Ecto Repo. The example below presents a `UsersController` where an `index` action retrieves a list of users from the server, and a `show` action retrieves a single `User`:
 
   ```elixir
@@ -105,6 +107,31 @@ After defining the configuration and model, you are allowed to retrieve data fro
       end
     end
   ```
+### Accepted data output 
+
+By default, Dayron expects resources endpoints to output a flat list of elements. For instance if you are using JSON, your endpoint should look like this: 
+
+  ```
+	[ 
+		{ "name": "User 1", "id": 0},
+		{ "name": "User 2", "id": 1}, 
+		{ "name": "User 3", "id": 2} 
+	]
+  ```  
+
+You can also use basic nested elements like this: 
+  
+  ```
+	{
+		"data": [ 
+			{ "name": "User 1", "id": 0},
+			{ "name": "User 2", "id": 1}, 
+			{ "name": "User 3", "id": 2} 
+		]
+	}
+  ```  
+
+However, if you are using more complex or specific data structures, you can override the [Model.__from_json_list__/3](https://hexdocs.pm/dayron/Dayron.Model.html#from_json_list/3) or [Model.__from_json__/3](https://hexdocs.pm/dayron/Dayron.Model.html#from_json/3) in your Model.  
 
 ## Generating modules
 
