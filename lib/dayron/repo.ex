@@ -289,6 +289,8 @@ defmodule Dayron.Repo do
         |> execute!(adapter, logger)
 
     case response do
+      %Response{status_code: 200, body: body} ->
+        {:ok, Model.from_json(model, body)}
       %Response{status_code: 201, body: body} ->
         {:ok, Model.from_json(model, body)}
       %Response{status_code: 422} ->
