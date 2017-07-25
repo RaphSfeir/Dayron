@@ -69,11 +69,11 @@ defmodule Dayron.HTTPoisonAdapterTest do
   test "accepts custom headers", %{bypass: bypass, api_url: api_url} do
     Bypass.expect bypass, fn conn ->
       assert "/resources/id" == conn.request_path
-      assert [_a, _b, {"accesstoken", "token"} | _] = conn.req_headers
+      assert [{"accesstoken", "token"}, _a, _b | _] = conn.req_headers
       assert "GET" == conn.method
       Plug.Conn.resp(conn, 200, "")
     end
-    response = HTTPoisonAdapter.get("#{api_url}/resources/id", [accesstoken: "token"])
+    response = HTTPoisonAdapter.get("#{api_url}/resources/id", [{"accesstoken", "token"}])
     assert {:ok, %Dayron.Response{status_code: 200, body: _}} = response
   end
 
@@ -131,7 +131,7 @@ defmodule Dayron.HTTPoisonAdapterTest do
   test "returns an empty body for a valid delete request", %{bypass: bypass, api_url: api_url} do
     Bypass.expect bypass, fn conn ->
       assert "/resources/id" == conn.request_path
-      assert [{"content-type", "application/json"}|_] = conn.req_headers
+      assert [_a, _b, {"content-type", "application/json"}|_] = conn.req_headers
       assert "DELETE" == conn.method
       Plug.Conn.resp(conn, 204, "")
     end
