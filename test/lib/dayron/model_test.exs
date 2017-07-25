@@ -20,6 +20,32 @@ defmodule Dayron.ModelTest do
     assert struct.age == 30
   end
 
+
+  test "flat enumerable returns a list of populated struct" do
+    [first_struct | others] = Model.from_json_list(MyModel, [
+      %{name: "Full Name 1", age: 30},
+      %{name: "Full Name 2", age: 31},
+      %{name: "Full Name 3", age: 45}
+    ])
+
+    assert %MyModel{} = first_struct
+    assert first_struct.name == "Full Name 1"
+    assert first_struct.age == 30
+    assert length(others) == 2
+  end
+
+  test "nested enumerable with 'data' property returns a list of populated struct" do
+    [first_struct | others] = Model.from_json_list(MyModel, %{data: [
+       %{name: "Full Name 1", age: 30},
+       %{name: "Full Name 2", age: 31},
+       %{name: "Full Name 3", age: 45}
+       ]})
+    assert %MyModel{} = first_struct
+    assert first_struct.name == "Full Name 1"
+    assert first_struct.age == 30
+    assert length(others) == 2
+  end
+
   defmodule MyEctoModel do
     use Dayron.Model
 
@@ -59,21 +85,21 @@ defmodule Dayron.ModelTest do
   test "raises on protocol exception on url_for" do
     msg = ~r/the given module is not a Dayron.Model/
     assert_raise Protocol.UndefinedError, msg, fn -> 
-      Model.url_for(MyInvalidModel)
+    Model.url_for(MyInvalidModel)
     end
   end
 
   test "raises on protocol exception on from_json" do
     msg = ~r/the given module is not a Dayron.Model/
     assert_raise Protocol.UndefinedError, msg, fn -> 
-      Model.from_json(MyInvalidModel, %{name: "Full Name"})
+    Model.from_json(MyInvalidModel, %{name: "Full Name"})
     end
   end
 
   test "raises on protocol exception on from_json_list" do
     msg = ~r/the given module is not a Dayron.Model/
     assert_raise Protocol.UndefinedError, msg, fn -> 
-      Model.from_json_list(MyInvalidModel, [%{name: "Full Name"}])
+    Model.from_json_list(MyInvalidModel, [%{name: "Full Name"}])
     end
   end
 end

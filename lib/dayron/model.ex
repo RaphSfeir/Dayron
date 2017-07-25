@@ -91,6 +91,10 @@ defmodule Dayron.Model do
         Enum.map(data, &__from_json__(&1, opts))
       end
 
+      def __from_json_list__(%{data: data}, opts) when is_list(data) do
+        __from_json_list__(data, opts)
+      end
+
       def __from_json_list__(data, _opts), do: struct(__MODULE__, data)
 
       defoverridable [__url_for__: 1, __from_json__: 2, __from_json_list__: 2]
