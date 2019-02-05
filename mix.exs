@@ -44,7 +44,7 @@ defmodule Dayron.Mixfile do
   defp deps do
     [
       {:poison,       "~> 3.0 or ~>1.5 or ~>2.0"},
-      {:httpoison,    "~> 0.13"},
+      {:httpoison,    "~> 1.4"},
       {:credo,        "~> 0.3",     only: [:dev, :test]},
       {:bypass,       "~> 0.1",     only: :test},
       {:excoveralls,  "~> 0.5",     only: :test},
